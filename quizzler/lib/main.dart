@@ -27,8 +27,33 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Icon> scoreKeeper = [];
-  var quesNum = 0;
+  void checkAns(bool userAns) {
+    setState(() {
+      brain.updateScore(userAns);
+      brain.checkGameOver(context);
+    });
+  }
+
+  Widget QuizButton(bool x, Color color) {
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.all(15.0),
+        child: TextButton(
+          style: TextButton.styleFrom(backgroundColor: color),
+          child: Text(
+            x.toString().toUpperCase(),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.0,
+            ),
+          ),
+          onPressed: () {
+            checkAns(x);
+          },
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +67,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                brain.questions[quesNum].quesText,
+                brain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -52,63 +77,12 @@ class _QuizPageState extends State<QuizPage> {
             ),
           ),
         ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: TextButton(
-              style: TextButton.styleFrom(backgroundColor: Colors.green),
-              child: Text(
-                'True',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
-                ),
-              ),
-              onPressed: () {
-                setState(() {
-                  if (brain.questions[quesNum].quesAns == true)
-                    scoreKeeper.add(Icon(Icons.check, color: Colors.green));
-                  else
-                    scoreKeeper.add(Icon(Icons.close, color: Colors.red));
-                  if (quesNum < brain.questions.length - 1) quesNum++;
-                });
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: TextButton(
-              style: TextButton.styleFrom(backgroundColor: Colors.red),
-              child: Text(
-                'False',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                setState(() {
-                  if (brain.questions[quesNum].quesAns == false)
-                    scoreKeeper.add(Icon(Icons.check, color: Colors.green));
-                  else
-                    scoreKeeper.add(Icon(Icons.close, color: Colors.red));
-                  if (quesNum < brain.questions.length - 1) quesNum++;
-                });
-              },
-            ),
-          ),
-        ),
+        QuizButton(true, Colors.green),
+        QuizButton(false, Colors.red),
         Row(
-          children: scoreKeeper,
+          children: brain.scoreKeeper,
         )
       ],
     );
   }
 }
-
-// TODO: 97
-/*
-START FROM 97
-*/

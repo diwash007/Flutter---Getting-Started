@@ -1,7 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'question.dart';
 
 class QuizBrain {
-  List<Question> questions = [
+  int _quesNum = 0;
+  int score = 0;
+  List<Icon> scoreKeeper = [];
+  List<Question> _questions = [
     Question('Some cats are actually allergic to humans', true),
     Question('You can lead a cow down stairs but not up stairs.', false),
     Question('Approximately one quarter of human bones are in the feet.', true),
@@ -28,4 +33,52 @@ class QuizBrain {
         'In West Virginia, USA, if you accidentally hit an animal with your car, you are free to take it home to eat.',
         true),
   ];
+
+  void nextQues() {
+    _quesNum++;
+  }
+
+  String getQuestionText() {
+    return _questions[_quesNum].quesText;
+  }
+
+  bool getCorrectAns() {
+    return _questions[_quesNum].quesAns;
+  }
+
+  void updateScore(userAns) {
+    if (this.getCorrectAns() == userAns) {
+      scoreKeeper.add(Icon(Icons.check, color: Colors.green));
+      score++;
+    } else
+      scoreKeeper.add(Icon(Icons.close, color: Colors.red));
+    this.nextQues();
+  }
+
+  void checkGameOver(context) {
+    if (_quesNum == _questions.length) {
+      Alert(
+        context: context,
+        title: "Quiz finished!",
+        desc: 'Score: ${this.score}',
+        buttons: [
+          DialogButton(
+            child: Text(
+              "Play Again",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            width: 150,
+          )
+        ],
+      ).show();
+      this.reset();
+    }
+  }
+
+  void reset() {
+    scoreKeeper = [];
+    _quesNum = 0;
+    score = 0;
+  }
 }
