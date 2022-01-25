@@ -16,3 +16,18 @@ const kBigTextStyle = TextStyle(
   fontSize: 40.0,
   fontWeight: FontWeight.w900,
 );
+
+const resultTextStyle = TextStyle(
+  color: Color(0xFF24D876),
+  fontSize: 22.0,
+  fontWeight: FontWeight.bold,
+);
+
+const bmiTextStyle = TextStyle(
+  fontSize: 90.0,
+  fontWeight: FontWeight.bold,
+);
+
+const resultBodyTextStyle = TextStyle(
+  fontSize: 22.0,
+);
