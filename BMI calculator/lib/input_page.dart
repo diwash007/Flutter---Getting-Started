@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+const bottomContainerHeight = 80.0;
+const BoxBgColor = Color(0xFF1D1E33);
+const btnColor = Color(0xFFEB1555);
+
 class InputPage extends StatefulWidget {
   @override
   _InputPageState createState() => _InputPageState();
@@ -18,10 +22,10 @@ class _InputPageState extends State<InputPage> {
               child: Row(
                 children: [
                   smallBox(
-                    color: Color(0xFF1D1E33),
+                    color: BoxBgColor,
                   ),
                   smallBox(
-                    color: Color(0xFF1D1E33),
+                    color: BoxBgColor,
                   ),
                 ],
               ),
@@ -30,7 +34,7 @@ class _InputPageState extends State<InputPage> {
               child: Container(
                 margin: EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
-                  color: Color(0xFF1D1E33),
+                  color: BoxBgColor,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
@@ -39,12 +43,21 @@ class _InputPageState extends State<InputPage> {
               child: Row(
                 children: [
                   smallBox(
-                    color: Color(0xFF1D1E33),
+                    color: BoxBgColor,
                   ),
                   smallBox(
-                    color: Color(0xFF1D1E33),
+                    color: BoxBgColor,
                   ),
                 ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.all(10.0),
+              width: double.infinity,
+              height: bottomContainerHeight,
+              decoration: BoxDecoration(
+                color: btnColor,
+                borderRadius: BorderRadius.circular(10.0),
               ),
             ),
           ],
@@ -59,7 +72,7 @@ class smallBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        margin: EdgeInsets.all(15.0),
+        margin: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(10.0),
