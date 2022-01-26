@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
-import 'reusable_card.dart';
-import 'constants.dart';
-import 'buttons.dart';
+import '../components/reusable_card.dart';
+import '../constants.dart';
+import '../components/bottom_button.dart';
 
 class ResultsPage extends StatelessWidget {
+  // ResultsPage(
+  //     {@required this.bmi,
+  //     @required this.resultText,
+  //     @required this.resultMsg});
+  // final String bmi;
+  // final String resultText;
+  // final String resultMsg;
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context).settings.arguments as Map<String, String>;
     return Scaffold(
       appBar: AppBar(
         title: Text('BMI CALCULATOR'),
@@ -33,17 +42,17 @@ class ResultsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Normal',
+                    args['resultText'],
                     style: resultTextStyle,
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    '18.3',
+                    args['bmi'],
                     style: bmiTextStyle,
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    'hello',
+                    args['resultMsg'],
                     style: resultBodyTextStyle,
                     textAlign: TextAlign.center,
                   )
