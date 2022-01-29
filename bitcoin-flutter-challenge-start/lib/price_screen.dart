@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'coin_data.dart';
+import 'utilities/coin_data.dart';
+import 'utilities/networking.dart';
 import 'dart:io' show Platform;
 
 class PriceScreen extends StatefulWidget {
@@ -10,64 +11,32 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = 'USD';
+  List rates = ['?', '?', '?'];
 
-  // DropdownButton<String> androidDropdown() {
-  //   List<DropdownMenuItem<String>> dropdownItems = [];
-  //   for (String currency in currenciesList) {
-  //     var newItem = DropdownMenuItem(
-  //       child: Text(currency),
-  //       value: currency,
-  //     );
-  //     dropdownItems.add(newItem);
-  //   }
-
-  //   return DropdownButton<String>(
-  //     value: selectedCurrency,
-  //     items: dropdownItems,
-  //     onChanged: (value) {
-  //       setState(() {
-  //         selectedCurrency = value;
-  //       });
-  //     },
-  //   );
-  // }
-
-  // CupertinoPicker iOSPicker() {
-  //   List<Text> pickerItems = [];
-  //   for (String currency in currenciesList) {
-  //     pickerItems.add(Text(currency));
-  //   }
-
-  //   return CupertinoPicker(
-  //     backgroundColor: Colors.lightBlue,
-  //     itemExtent: 32.0,
-  //     onSelectedItemChanged: (selectedIndex) {
-  //       print(selectedIndex);
-  //     },
-  //     children: pickerItems,
-  //   );
-  // }
-
-  //TODO: Create a method here called getData() to get the coin data from coin_data.dart
-
-  @override
-  void initState() {
-    super.initState();
-    //TODO: Call getData() when the screen loads up.
-  }
-
-  List<DropdownMenuItem<String>> getDropdownItems() {
+  DropdownButton<String> AndroidDropdown() {
     List<DropdownMenuItem<String>> items = [];
     for (String curr in currenciesList) {
-      items.add(DropdownMenuItem(
-        child: Text(curr),
-        value: curr,
-      ));
+      items.add(
+        DropdownMenuItem(
+          child: Text(curr),
+          value: curr,
+        ),
+      );
     }
-    return items;
+    return DropdownButton<String>(
+      menuMaxHeight: 320.0,
+      value: selectedCurrency,
+      items: items,
+      onChanged: (value) {
+        setState(() {
+          selectedCurrency = value;
+          getData(value);
+        });
+      },
+    );
   }
 
-  List<Widget> getPickerItems() {
+  CupertinoPicker IOSPicker() {
     List<Text> items = [];
     for (String curr in currenciesList) {
       items.add(
@@ -77,12 +46,62 @@ class _PriceScreenState extends State<PriceScreen> {
         ),
       );
     }
-    return items;
+    return CupertinoPicker(
+      backgroundColor: Colors.lightBlue,
+      itemExtent: 32.0,
+      onSelectedItemChanged: (value) {
+        currenciesList[value];
+      },
+      children: items,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData('USD');
+  }
+
+  void getData(curr) async {
+    NetworkHelper networkHelper = NetworkHelper();
+    rates = await networkHelper.getCoinData(curr);
+    setState(() {
+      rates = rates;
+    });
+  }
+
+  List<Widget> cryptoDivs() {
+    List<Widget> cryptos = [];
+    List<String> coins = ['BTC', 'ETH', 'LTC'];
+    for (int i = 0; i < 3; i++) {
+      cryptos.add(Container(
+        width: double.infinity,
+        padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
+        child: Card(
+          color: Colors.lightBlueAccent,
+          elevation: 5.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
+            child: Text(
+              '1 ${coins[i]} = ${rates[i]} $selectedCurrency',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ));
+    }
+    return cryptos;
   }
 
   @override
   Widget build(BuildContext context) {
-    getDropdownItems();
     return Scaffold(
       appBar: AppBar(
         title: Text('🤑 Coin Ticker'),
@@ -91,53 +110,18 @@ class _PriceScreenState extends State<PriceScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
-            child: Card(
-              color: Colors.lightBlueAccent,
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-                child: Text(
-                  //TODO: Update the Text Widget with the live bitcoin data here.
-                  '1 BTC = ? USD',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
+          Column(
+            children: cryptoDivs(),
           ),
           Container(
-              height: 150.0,
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(bottom: 30.0),
-              color: Colors.lightBlue,
-              child: CupertinoPicker(
-                backgroundColor: Colors.lightBlue,
-                itemExtent: 32.0,
-                onSelectedItemChanged: (value) {
-                  currenciesList[value];
-                },
-                children: getPickerItems(),
-              )),
+            height: 150.0,
+            alignment: Alignment.center,
+            padding: EdgeInsets.only(bottom: 30.0),
+            color: Colors.lightBlue,
+            child: Platform.isIOS ? IOSPicker() : AndroidDropdown(),
+          ),
         ],
       ),
     );
   }
 }
-
-// DropdownButton<String>(
-//               value: selectedCurrency,
-//               items: getDropdownItems(),
-//               onChanged: (value) {
-//                 setState(() {
-//                   selectedCurrency = value;
-//                 });
-//               },
-//             ),
