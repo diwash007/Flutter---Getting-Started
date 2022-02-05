@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class RegistrationScreen extends StatefulWidget {
+  static const path = '/register';
+
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
