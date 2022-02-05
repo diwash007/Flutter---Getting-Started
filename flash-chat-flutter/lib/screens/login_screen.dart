@@ -54,9 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: RoundedButton(
                 color: Colors.lightBlueAccent,
                 title: 'Log In',
-                onPressed: () {
-                  Navigator.pushNamed(context, LoginScreen.path);
-                },
+                onPressed: () {},
               ),
             ),
           ],

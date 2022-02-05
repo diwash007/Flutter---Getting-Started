@@ -53,9 +53,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               child: RoundedButton(
                 color: Colors.blueAccent,
                 title: 'Register',
-                onPressed: () {
-                  Navigator.pushNamed(context, RegistrationScreen.path);
-                },
+                onPressed: () {},
               ),
             ),
           ],
