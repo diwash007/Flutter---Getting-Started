@@ -1,6 +1,7 @@
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import '../components/rounded_button.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -23,11 +24,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       // upperBound: 100.0,
     );
 
-    // animation = CurvedAnimation(parent: controller, curve: Curves.decelerate);
-
     animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
         .animate(controller);
     controller.forward();
+
+    // animation = CurvedAnimation(parent: controller, curve: Curves.decelerate);
 
     // animation.addStatusListener((status) {
     //   if (status == AnimationStatus.completed) {
@@ -83,40 +84,24 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             SizedBox(
               height: 48.0,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                elevation: 5.0,
+            Hero(
+              tag: 'login',
+              child: RoundedButton(
                 color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, LoginScreen.path);
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Log In',
-                  ),
-                ),
+                title: 'Log In',
+                onPressed: () {
+                  Navigator.pushNamed(context, LoginScreen.path);
+                },
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
+            Hero(
+              tag: 'register',
+              child: RoundedButton(
                 color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, RegistrationScreen.path);
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Register',
-                  ),
-                ),
+                title: 'Register',
+                onPressed: () {
+                  Navigator.pushNamed(context, RegistrationScreen.path);
+                },
               ),
             ),
           ],
