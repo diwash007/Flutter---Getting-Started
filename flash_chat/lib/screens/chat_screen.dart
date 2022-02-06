@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -11,6 +12,8 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  User? user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 //Implement logout functionality
               }),
         ],
-        title: const Text('⚡️Chat'),
+        title: Text('⚡️Chat${user!.email}'),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
