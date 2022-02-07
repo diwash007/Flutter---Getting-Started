@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+const radius20 = Radius.circular(20);
+const radius0 = Radius.circular(0);
+
 const kSendButtonTextStyle = TextStyle(
   color: Colors.lightBlueAccent,
   fontWeight: FontWeight.bold,

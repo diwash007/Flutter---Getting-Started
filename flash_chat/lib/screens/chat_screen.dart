@@ -25,14 +25,14 @@ class _ChatScreenState extends State<ChatScreen> {
   //   }
   // }
 
-  void messagesStream() async {
-    await for (var snapshot
-        in FirebaseFirestore.instance.collection('messages').snapshots()) {
-      for (var msg in snapshot.docs) {
-        print(msg.data());
-      }
-    }
-  }
+  // void messagesStream() async {
+  //   await for (var snapshot
+  //       in FirebaseFirestore.instance.collection('messages').snapshots()) {
+  //     for (var msg in snapshot.docs) {
+  //       print(msg.data());
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +43,9 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
               icon: const Icon(Icons.close),
               onPressed: () async {
-                // await FirebaseAuth.instance.signOut();
-                // Navigator.pop(context);
-                messagesStream();
+                await FirebaseAuth.instance.signOut();
+                Navigator.pop(context);
+                // messagesStream();
               }),
         ],
         title: Text('⚡️Chat${user!.email}'),
@@ -56,7 +56,9 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const MessagesStream(),
+            MessagesStream(
+              user: user,
+            ),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -70,7 +72,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   TextButton(
                     onPressed: () async {
-                      msgController.clear();
                       if (msgController.text.trim() != '') {
                         await FirebaseFirestore.instance
                             .collection('messages')
@@ -79,6 +80,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           'text': msgController.text,
                         });
                       }
+                      msgController.clear();
                     },
                     child: const Text(
                       'Send',
@@ -96,7 +98,8 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class MessagesStream extends StatelessWidget {
-  const MessagesStream({Key? key}) : super(key: key);
+  const MessagesStream({Key? key, required this.user}) : super(key: key);
+  final dynamic user;
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +117,14 @@ class MessagesStream extends StatelessWidget {
         for (var msg in messages) {
           String msgText = msg['text'];
           String sender = msg['sender'];
-          messageBubbles.add(MessageBubble(msgText: msgText, sender: sender));
+
+          messageBubbles.add(
+            MessageBubble(
+              msgText: msgText,
+              sender: sender,
+              isMe: sender == user!.email ? true : false,
+            ),
+          );
         }
 
         return Expanded(
@@ -132,9 +142,14 @@ class MessagesStream extends StatelessWidget {
 }
 
 class MessageBubble extends StatelessWidget {
-  const MessageBubble({Key? key, required this.msgText, required this.sender})
+  const MessageBubble(
+      {Key? key,
+      required this.msgText,
+      required this.sender,
+      required this.isMe})
       : super(key: key);
 
+  final bool isMe;
   final String msgText;
   final String sender;
 
@@ -143,7 +158,8 @@ class MessageBubble extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment:
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Text(
             sender,
@@ -154,8 +170,13 @@ class MessageBubble extends StatelessWidget {
           ),
           Material(
             elevation: 5.0,
-            color: Colors.lightBlueAccent,
-            borderRadius: BorderRadius.circular(30.0),
+            color: isMe ? Colors.lightBlueAccent : Colors.blueGrey,
+            borderRadius: BorderRadius.only(
+              bottomLeft: radius20,
+              topLeft: isMe ? radius20 : radius0,
+              bottomRight: radius20,
+              topRight: isMe ? radius0 : radius20,
+            ),
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: 10.0,
