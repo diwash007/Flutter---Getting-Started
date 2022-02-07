@@ -16,6 +16,23 @@ class _ChatScreenState extends State<ChatScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   late String message;
 
+  // void getMessages() async {
+  //   final QuerySnapshot<Map<String, dynamic>> messages =
+  //       await FirebaseFirestore.instance.collection('messages').get();
+  //   for (var msg in messages.docs) {
+  //     print(msg.data());
+  //   }
+  // }
+
+  void messagesStream() async {
+    await for (var snapshot
+        in FirebaseFirestore.instance.collection('messages').snapshots()) {
+      for (var msg in snapshot.docs) {
+        print(msg.data());
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,8 +42,9 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
               icon: const Icon(Icons.close),
               onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-                Navigator.pop(context);
+                // await FirebaseAuth.instance.signOut();
+                // Navigator.pop(context);
+                messagesStream();
               }),
         ],
         title: Text('⚡️Chat${user!.email}'),
