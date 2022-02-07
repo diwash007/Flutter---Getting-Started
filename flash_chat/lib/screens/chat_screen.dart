@@ -48,7 +48,15 @@ class _ChatScreenState extends State<ChatScreen> {
                 // messagesStream();
               }),
         ],
-        title: Text('⚡️Chat${user!.email}'),
+        title: Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
+          const Text('⚡️Chat'),
+          Text(
+            '\t(${user!.email})',
+            style: const TextStyle(
+              fontSize: 15.0,
+            ),
+          ),
+        ]),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
@@ -78,9 +86,10 @@ class _ChatScreenState extends State<ChatScreen> {
                             .add({
                           'sender': user!.email,
                           'text': msgController.text,
+                          'sentAt': DateTime.now(),
                         });
+                        msgController.clear();
                       }
-                      msgController.clear();
                     },
                     child: const Text(
                       'Send',
@@ -104,7 +113,10 @@ class MessagesStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('messages').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('messages')
+          .orderBy('sentAt', descending: true)
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(
@@ -129,6 +141,7 @@ class MessagesStream extends StatelessWidget {
 
         return Expanded(
           child: ListView(
+            reverse: true,
             padding: const EdgeInsets.symmetric(
               horizontal: 10.0,
               vertical: 20.0,
