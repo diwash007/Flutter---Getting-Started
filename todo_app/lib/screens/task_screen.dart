@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../widgets/task_list.dart';
+import 'package:todo_app/widgets/task_list.dart';
+import 'package:todo_app/screens/add_task_screen.dart';
 
 class TaskScreen extends StatelessWidget {
   const TaskScreen({Key? key}) : super(key: key);
@@ -50,7 +51,10 @@ class TaskScreen extends StatelessWidget {
             ),
             Flexible(
               child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 30.0,
+                  ),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -58,13 +62,24 @@ class TaskScreen extends StatelessWidget {
                       topRight: Radius.circular(20.0),
                     ),
                   ),
-                  child: TasksList()),
+                  child: const TasksList()),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0),
+              ),
+            ),
+            context: context,
+            builder: (context) => AddTaskScreen(),
+          );
+        },
         backgroundColor: Colors.lightBlueAccent,
         child: const Icon(Icons.add),
       ),
