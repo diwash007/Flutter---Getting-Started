@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/task_list.dart';
 
 class TaskScreen extends StatelessWidget {
   const TaskScreen({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class TaskScreen extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(
-                30.0,
+                20.0,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +38,7 @@ class TaskScreen extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const Text(
+                  Text(
                     '12 tasks',
                     style: TextStyle(
                       color: Colors.white,
@@ -49,13 +50,15 @@ class TaskScreen extends StatelessWidget {
             ),
             Flexible(
               child: Container(
-                decoration: const BoxDecoration(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20.0),
                       topRight: Radius.circular(20.0),
-                    )),
-              ),
+                    ),
+                  ),
+                  child: TasksList()),
             ),
           ],
         ),
