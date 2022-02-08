@@ -74,6 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           password: passwordController.text);
                       Navigator.pushNamed(context, ChatScreen.path);
                     } catch (e) {
+                      // ignore: avoid_print
                       print(e);
                     }
                     setState(() {
