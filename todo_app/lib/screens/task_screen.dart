@@ -77,7 +77,14 @@ class TaskScreen extends StatelessWidget {
               ),
             ),
             context: context,
-            builder: (context) => AddTaskScreen(),
+            isScrollControlled: true,
+            builder: (context) => SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: const AddTaskScreen(),
+              ),
+            ),
           );
         },
         backgroundColor: Colors.lightBlueAccent,
