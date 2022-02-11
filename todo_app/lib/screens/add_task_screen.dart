@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/task_data.dart';
 
 class AddTaskScreen extends StatelessWidget {
-  AddTaskScreen({Key? key, required this.addTaskCallback}) : super(key: key);
-
-  final Function addTaskCallback;
+  AddTaskScreen({Key? key}) : super(key: key);
 
   final TextEditingController controller = TextEditingController();
 
@@ -32,7 +32,9 @@ class AddTaskScreen extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              addTaskCallback(controller.text);
+              Provider.of<TaskData>(context, listen: false)
+                  .addTask(controller.text);
+              Navigator.pop(context);
             },
             style: ButtonStyle(
                 backgroundColor:
