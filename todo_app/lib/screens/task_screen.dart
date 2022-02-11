@@ -1,21 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/widgets/task_list.dart';
 import 'package:todo_app/screens/add_task_screen.dart';
-import '../models/task.dart';
+import '../models/task_data.dart';
+import 'package:provider/provider.dart';
 
-class TaskScreen extends StatefulWidget {
+class TaskScreen extends StatelessWidget {
   const TaskScreen({Key? key}) : super(key: key);
-
-  @override
-  State<TaskScreen> createState() => _TaskScreenState();
-}
-
-class _TaskScreenState extends State<TaskScreen> {
-  List<Task> tasks = [
-    Task(name: 'hello'),
-    Task(name: 'helloow'),
-    Task(name: 'kaalo')
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +42,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     ),
                   ),
                   Text(
-                    '${tasks.length} tasks',
+                    '${Provider.of<TaskData>(context).tasks.length} tasks',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16.0,
@@ -63,20 +53,19 @@ class _TaskScreenState extends State<TaskScreen> {
             ),
             Flexible(
               child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 30.0,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 30.0,
+                ),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
                   ),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      topRight: Radius.circular(20.0),
-                    ),
-                  ),
-                  child: TasksList(
-                    tasks: tasks,
-                  )),
+                ),
+                child: const TasksList(),
+              ),
             ),
           ],
         ),
@@ -97,11 +86,11 @@ class _TaskScreenState extends State<TaskScreen> {
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: AddTaskScreen(addTaskCallback: (newTask) {
-                  setState(() {
-                    tasks.add(
-                      Task(name: newTask),
-                    );
-                  });
+                  // setState(() {
+                  //   Provider.of<TaskData>(context).tasks.add(
+                  //     Task(name: newTask),
+                  //   );
+                  // });
                   Navigator.pop(context);
                 }),
               ),

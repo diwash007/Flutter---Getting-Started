@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import '../models/task.dart';
 
 class AddTaskScreen extends StatelessWidget {
   AddTaskScreen({Key? key, required this.addTaskCallback}) : super(key: key);
 
   final Function addTaskCallback;
 
-  TextEditingController controller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
